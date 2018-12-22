@@ -1,0 +1,18 @@
+---
+title: "Forest Change areas in `r attributes(fcPolygon)[['unit.nm']]`"
+author: "Wilson Lara, Victor Gutierrez-Velez"
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r, echo = FALSE}
+par(mfrow = c(1,2))
+plot(gfcarea, rate = FALSE)
+plot(gfcarea, rate = TRUE)
+```
+
+

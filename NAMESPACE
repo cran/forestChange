@@ -1,0 +1,10 @@
+importFrom("raster","area","crop","extent","getData","getValues","intersect","mask","setValues","raster","rasterize","reclassify","stack","values","Which")
+importFrom("rgdal","readGDAL")
+importFrom("parallel","mcmapply","detectCores")
+importFrom("stats","formula","median","na.omit","time","ts")
+importFrom("SDMTools","PatchStat")
+importFrom("utils", "download.file","read.table","write.csv")
+importFrom("graphics","axis","box","lines","par","plot","points","polygon")
+export(EBVmetric,FCMosaic,FCPolygon,getGADM,GFCurls,HansenUrltoExtent, plot.EBVmetric)
+S3method(plot,EBVmetric) 
+
