@@ -2,18 +2,19 @@
 \alias{HansenUrltoExtent}
 \title{Extents in GFC links}
 \description{This function can extract extents of Global Forest Change data
-(\code{GFC}) using corresponding \code{URL}s.}
+(\code{GFC}) using a corresponding \code{URL}.}
 \usage{
 HansenUrltoExtent(x, path. = "[[:digit:]]{1,3}[N|S|E|W]")
 }
 \arguments{
-  \item{x}{\code{character}. \code{URL} to the \code{GFC}, see
-\code{References}.}
+  \item{x}{\code{character}. \code{URL} to the \code{GFC} such as any
+of these produced by \code{\link{GFCurls}}.}
   \item{path.}{\code{character}. Pattern
 in the \code{URL} to extract
 the extent. Default extracts
-the 3 digits closer to any
-of the letters \code{N},
+the 3 digits nearest to any
+of the cardinal
+directions:\code{N},
 \code{S}, \code{E}, or
 \code{W}.}
 }

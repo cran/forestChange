@@ -44,6 +44,9 @@ a higher-level subdivision is required: unit.nm = c('unit', 'h.l.unit')")
 ### List of rasters.
 } , ex=function() {
 ## Printing municipalities of Colombia:    
-muni <- getGADM()
-head(muni)
+## \donttest{
+    ## muni <- getGADM()
+    ## head(muni)
+## }
+
 })

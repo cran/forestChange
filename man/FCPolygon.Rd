@@ -65,22 +65,22 @@ A. (2013). High-resolution global maps of
 
 \examples{
 ## A list of departments of Colombia is printed:
-\donttest{
-dep <- FCPolygon(level = 1)
-head(dep)
-}
+ \donttest{
+     dep <- FCPolygon(level = 1)
+     head(dep)
+ }
 ## Two adjacent layers of GFC must be bounded together before cropping
 ## the GFC data using the boundaries of the the municipality of
 ## 'Cumaribo' in Colombia. This is automatically developed by
 ## FCPolygon:
-\donttest{
-cumariboArea <- FCPolygon(pol = 'Cumaribo')
-}
+ \donttest{
+ cumariboArea <- FCPolygon(pol = 'Cumaribo')
+ }
 ## The name 'Mosquera' matchs two municipalities of Colombia. A
 ## corresponding department should be specified in the argument 'pol'
 ## of FCPolygon:
-\donttest{
-mosquera <- FCPolygon('Mosquera')
-mosqueraNarinho <- FCPolygon(pol = c('Mosquera','Narino'))
-}
+ \donttest{
+ mosquera <- FCPolygon('Mosquera')
+ mosqueraNarinho <- FCPolygon(pol = c('Mosquera','Narino'))
+ }
 }

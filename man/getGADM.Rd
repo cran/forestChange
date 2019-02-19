@@ -29,6 +29,9 @@ country. Default \code{'COL'}}
 
 \examples{
 ## Printing municipalities of Colombia:    
-muni <- getGADM()
-head(muni)
+ \donttest{
+     muni <- getGADM()
+     head(muni)
+ }
+
 }

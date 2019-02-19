@@ -1,17 +1,18 @@
 HansenUrltoExtent <- structure(function #Extents in GFC links
 ### This function can extract extents of Global Forest Change data
-### (\code{GFC}) using corresponding \code{URL}s.
+### (\code{GFC}) using a corresponding \code{URL}.
                      ##details<<The function is implemented by
                      ##\code{\link{FCPolygon}}.
                      ##references<<\href{http://earthenginepartners.appspot.com}{http://earthenginepartners.appspot.com/science-2013-global-forest}
 (
-    x, ##<<\code{character}. \code{URL} to the \code{GFC}, see
-       ##\code{References}.
+    x, ##<<\code{character}. \code{URL} to the \code{GFC} such as any
+       ##of these produced by \code{\link{GFCurls}}.
     path. = "[[:digit:]]{1,3}[N|S|E|W]" ##<<\code{character}. Pattern
                                         ##in the \code{URL} to extract
                                         ##the extent. Default extracts
-                                        ##the 3 digits closer to any
-                                        ##of the letters \code{N},
+                                        ##the 3 digits nearest to any
+                                        ##of the cardinal
+                                        ##directions:\code{N},
                                         ##\code{S}, \code{E}, or
                                         ##\code{W}.
 ) {

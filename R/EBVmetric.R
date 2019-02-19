@@ -120,9 +120,9 @@ EBVmetric <- structure(function #EBV metric
     ## of 'Uribia' in Colombia and compute fractal dimensions from
     ## year 10 to year 17:
     ## \donttest{
-    mpio <- 'Uribia'
-    gadm <- FCPolygon(mpio, level = 2)
-    smet <- EBVmetric(gadm, met = 'frac', year = 10:17)
-    plot(smet)
+    ## mpio <- 'Uribia'
+    ## gadm <- FCPolygon(mpio, level = 2)
+    ## smet <- EBVmetric(gadm, met = 'frac', year = 10:17)
+    ## plot(smet)
     ## }
 })

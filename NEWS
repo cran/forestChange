@@ -1,0 +1,8 @@
+New changes in forestChange V0.4:
+
+Changes in function "GFCurls": A friendly message is printed if there
+is no internet connection. Besides, routines for processing URLs were
+changed implementing the functions "read_html" (package "curl"), and
+"html_nodes" and "html_attr" (package "rvest"). Finally, This function
+uses now the system of the machine ("Windows", "Linux") to change the
+encoding argument in "read.table" ("unknown", "UTF-8").

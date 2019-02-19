@@ -1,36 +1,37 @@
 GFCurls <- structure(function #URLs of GFC
-### This function can find lists of \code{URL} necessary to download Global
-### Forest Change data (\code{GFC}).
-                     ##details<<The function is implemented by
-                     ##\code{\link{FCPolygon}}.
-                     ##references<<\href{http://earthenginepartners.appspot.com}{http://earthenginepartners.appspot.com/science-2013-global-forest}
+### This function retrieves \code{URL} lists to layers of Global
+### Forest Change (\code{GFC}).
+                     ##references<<\href{http://earthenginepartners.appspot.com}{https://earthenginepartners.appspot.com/science-2013-global-forest/download_v1.5.html}
 (
-    lyrs = c('treecover2000','lossyear'), ##<<\code{character}. Portion
-                                          ##of the \code{URL}s matching
-                                          ##names of \code{GFC}
-                                          ##layers. Default
+    lyrs = c('treecover2000','lossyear'), ##<<\code{character}. Name(s)
+                                          ##of the layers. Default
                                           ##\code{'treecover2000'},
                                           ##and \code{'lossyear'}
-    gglapi = NULL, ##<<\code{character}.  Portion of an \code{URL}
-                   ##which is common to the set of \code{URL}s to be
-                   ##retrieved. If \code{NULL} then an application
-                   ##programming interface of google is used, see
-                   ##\code{References}.
-        ext = '.txt' ##<<\code{logical}. Extension of the file
-                     ##containing the links. Default \code{'txt'}
+    url = NULL ##<<\code{character}.  Path to the \code{html} file
+               ##containing the files. Default downloads the data from
+               ##the application programming interface of google, see
+               ##\code{References}.
 
-    
 ) {
-    if(is.null(gglapi))
-        gglapi <- 'https://storage.googleapis.com/earthenginepartners-hansen/GFC-2017-v1.5'
-    if(is.null(lyrs))
-        lyrs <- c('treecover2000','gain','lossyear','datamask','first','last')
-    lyrs. <- paste(lyrs, ext, sep ='')
-    lnks <- paste(gglapi, lyrs., sep = '/')
-    llnks <- lapply(lnks, read.table)
-    vlnks <- as.character(unlist(do.call('rbind',llnks)))
-    attributes(vlnks) <- c(attributes(vlnks),
-                           list(lyrs = lyrs))
+    if(!curl::has_internet())
+        return("no internet")
+    if(is.null(url)) url <-
+    "https://earthenginepartners.appspot.com/science-2013-global-forest/download_v1.2.html"
+    doc <- xml2::read_html(url)
+    nod <- rvest::html_nodes(doc, 'a')
+    ## href <- doc %>% html_nodes("a") %>% html_attr('href')
+    href <- rvest::html_attr(nod, "href")
+    lnks <- href[grepl('.txt', href)]
+    lyrs <- paste('\\b', lyrs, '\\b', sep = "")
+    lnks <- lnks[grepl(paste(lyrs, collapse = '|'), lnks)]
+    enco. <- "unknown"
+    if(Sys.info()['sysname']%in%'Linux')
+    enco. <- 'UTF-8'
+    fchImp <- function(x){
+        as.character(read.table(x, encoding = enco.)[,1L])}
+    llnks <- Map(function(x)
+        fchImp(x), lnks)
+    vlnks <- unlist(llnks, use.names = FALSE)
     return(vlnks)
 ### \code{character} vector.
 } , ex=function() {
