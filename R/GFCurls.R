@@ -19,22 +19,24 @@ GFCurls <- structure(function #URLs of GFC
     "https://earthenginepartners.appspot.com/science-2013-global-forest/download_v1.2.html"
     doc <- xml2::read_html(url)
     nod <- rvest::html_nodes(doc, 'a')
-    ## href <- doc %>% html_nodes("a") %>% html_attr('href')
     href <- rvest::html_attr(nod, "href")
     lnks <- href[grepl('.txt', href)]
     lyrs <- paste('\\b', lyrs, '\\b', sep = "")
     lnks <- lnks[grepl(paste(lyrs, collapse = '|'), lnks)]
-    enco. <- "unknown"
-    if(Sys.info()['sysname']%in%'Linux')
-    enco. <- 'UTF-8'
+    ## enco. <- "unknown"
+    enco. <- "latin1"
+    ## if(Sys.info()['sysname']%in%'Linux')
+    ## enco. <- 'UTF-8'
     fchImp <- function(x){
-        as.character(read.table(x, encoding = enco.)[,1L])}
+        as.character(read.table(x, encoding = enco., skipNul = TRUE)[,1L])}
     llnks <- Map(function(x)
         fchImp(x), lnks)
     vlnks <- unlist(llnks, use.names = FALSE)
     return(vlnks)
 ### \code{character} vector.
 } , ex=function() {
-    gainLayers <- GFCurls(lyrs = 'gain')
-    head(gainLayers)    
+    ## \donttest{
+    ## gainLayers <- GFCurls(lyrs = 'gain')
+    ## head(gainLayers)
+    ## }
 })

@@ -1,3 +1,8 @@
+New changes in forestChange V0.5:
+
+Changes in function "GFCurls": 'readTable' is implemented changing two
+defaults: 'encoding = latin1' and 'skipNul = TRUE'.
+
 New changes in forestChange V0.4:
 
 Changes in function "GFCurls": A friendly message is printed if there

@@ -15,8 +15,6 @@ Maintainer: \packageMaintainer{forestChange}
 }
 \author{Wilson Lara <wilarhen@temple.edu>, Victor Gutierrez-Velez <victorhugo@temple.edu>}
 
-
-
 \keyword{ package }
 
 

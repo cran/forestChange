@@ -23,6 +23,8 @@ the application programming interface of google, see
 
 
 \examples{
+\donttest{
 gainLayers <- GFCurls(lyrs = 'gain')
-head(gainLayers)    
+head(gainLayers)
+}    
 }
