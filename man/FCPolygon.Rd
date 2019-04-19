@@ -5,20 +5,23 @@
 using either Geographic Administrative Units (\code{GADM}) or
 other user-defined polygons.}
 \usage{FCPolygon(pol = NULL, lyrs = c("treecover2000", "lossyear"), 
-    multicore = TRUE, ...)}
+    url, multicore = TRUE, ...)}
 \arguments{
   \item{pol}{\code{SpatialPolygonsDataFrame}, \code{character}
 or \code{NULL}. A spatial-data polygon, the name of
-a \code{GADM}, or such a name plus its
-corresponding higher-level unit. If \code{NULL}
-then a list of \code{GADM} units is printed.}
-  \item{lyrs}{\code{character}. Strings
-matching layers in a
-google api used to
-download links of
-\code{GFC}. Default
-\code{'treecover2000'},
-and \code{'lossyear'}.}
+a \code{GADM}, or such a name plus its corresponding
+higher-level unit. If \code{NULL} then a list of
+\code{GADM} units is printed.}
+  \item{lyrs}{\code{character}. Vector
+of strings matching layer
+names in the \code{GFC}
+data. Defaults
+\code{'treecover2000'} and
+\code{'lossyear'}.}
+  \item{url}{\code{character}.  Path to the \code{html} file
+containing the files. If missing then data from the
+application programming interface of \code{GFC} is
+retrieved, see \code{\link{GFCurls}}.}
   \item{multicore}{\code{logical}. Use parallel
 execution. Default TRUE. This is ignored in
 Windows machines.}
@@ -66,8 +69,8 @@ A. (2013). High-resolution global maps of
 \examples{
 ## A list of departments of Colombia is printed:
  \donttest{
-     dep <- FCPolygon(level = 1)
-     head(dep)
+ dep <- FCPolygon(level = 1)
+ head(dep)
  }
 ## Two adjacent layers of GFC must be bounded together before cropping
 ## the GFC data using the boundaries of the the municipality of

@@ -12,10 +12,10 @@ higher-level unit (e.g. department/state). If
 \code{NULL} then a list of unit names
 corresponding to \code{'level'} is printed.}
   \item{level}{\code{numeric}. A number between zero and two,
-indicating any of the levels of administrative subdivisions in \code{GADM}:
-\code{0=country}, \code{1=first level of
-subdivision}, and \code{2=second level of
-subdivision}).}
+indicating any of the levels of administrative
+subdivisions in \code{GADM}: \code{0=country},
+\code{1=first level of subdivision}, and
+\code{2=second level of subdivision}).}
   \item{country}{\code{character}. \code{ISO} code specifying a
 country. Default \code{'COL'}}
 }
@@ -29,9 +29,9 @@ country. Default \code{'COL'}}
 
 \examples{
 ## Printing municipalities of Colombia:    
-## \donttest{
-    ## muni <- getGADM()
-    ## head(muni)
-## }
+ \donttest{
+     muni <- getGADM()
+     head(muni)
+ }
 
 }

@@ -10,10 +10,10 @@ getGADM <- structure(function #Get Geographic Adminitrative Unit
                     ##\code{NULL} then a list of unit names
                     ##corresponding to \code{'level'} is printed.
     level = 2, ##<<\code{numeric}. A number between zero and two,
-               ##indicating any of the levels of administrative subdivisions in \code{GADM}:
-               ##\code{0=country}, \code{1=first level of
-               ##subdivision}, and \code{2=second level of
-               ##subdivision}).
+               ##indicating any of the levels of administrative
+               ##subdivisions in \code{GADM}: \code{0=country},
+               ##\code{1=first level of subdivision}, and
+               ##\code{2=second level of subdivision}).
     country = 'COL' ##<<\code{character}. \code{ISO} code specifying a
                     ##country. Default \code{'COL'}
 ) {

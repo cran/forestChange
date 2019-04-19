@@ -1,6 +1,6 @@
-GFCurls <- structure(function #URLs of GFC
-### This function retrieves \code{URL} lists to layers of Global
-### Forest Change (\code{GFC}).
+GFCurls <- structure(function #URLs of GFC data
+### This function retrieves \code{URL} of Global Forest Change
+### (\code{GFC}) data.
                      ##references<<\href{http://earthenginepartners.appspot.com}{https://earthenginepartners.appspot.com/science-2013-global-forest/download_v1.5.html}
 (
     lyrs = c('treecover2000','lossyear'), ##<<\code{character}. Name(s)
@@ -8,15 +8,15 @@ GFCurls <- structure(function #URLs of GFC
                                           ##\code{'treecover2000'},
                                           ##and \code{'lossyear'}
     url = NULL ##<<\code{character}.  Path to the \code{html} file
-               ##containing the files. Default downloads the data from
-               ##the application programming interface of google, see
-               ##\code{References}.
+               ##containing the files. Default \code{NULL} retrieves
+               ##\code{URL}s stored in the application programming
+               ##interface of \code{GFC}, see \code{References}.
 
 ) {
     if(!curl::has_internet())
         return("no internet")
     if(is.null(url)) url <-
-    "https://earthenginepartners.appspot.com/science-2013-global-forest/download_v1.2.html"
+    "https://earthenginepartners.appspot.com/science-2013-global-forest/download_v1.6.html"
     doc <- xml2::read_html(url)
     nod <- rvest::html_nodes(doc, 'a')
     href <- rvest::html_attr(nod, "href")

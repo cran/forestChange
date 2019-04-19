@@ -1,8 +1,8 @@
 \name{GFCurls}
 \alias{GFCurls}
-\title{URLs of GFC}
-\description{This function retrieves \code{URL} lists to layers of Global
-Forest Change (\code{GFC}).}
+\title{URLs of GFC data}
+\description{This function retrieves \code{URL} of Global Forest Change
+(\code{GFC}) data.}
 \usage{GFCurls(lyrs = c("treecover2000", "lossyear"), url = NULL)}
 \arguments{
   \item{lyrs}{\code{character}. Name(s)
@@ -10,9 +10,9 @@ of the layers. Default
 \code{'treecover2000'},
 and \code{'lossyear'}}
   \item{url}{\code{character}.  Path to the \code{html} file
-containing the files. Default downloads the data from
-the application programming interface of google, see
-\code{References}.}
+containing the files. Default \code{NULL} retrieves
+\code{URL}s stored in the application programming
+interface of \code{GFC}, see \code{References}.}
 }
 
 \value{\code{character} vector.}
@@ -23,8 +23,8 @@ the application programming interface of google, see
 
 
 \examples{
-\donttest{
-gainLayers <- GFCurls(lyrs = 'gain')
-head(gainLayers)
-}    
+ \donttest{
+ gainLayers <- GFCurls(lyrs = 'gain')
+ head(gainLayers)
+ }
 }
