@@ -4,11 +4,9 @@
 \description{A plot of \code{\link{EBVmetric}} is printed.}
 \usage{\method{plot}{EBVmetric}(x, ...)}
 \arguments{
-  \item{x}{\code{\link{ts}}. Time series such as that produced by
-\code{\link{EBVmetric}}.}
-  \item{\dots}{further arguments in \code{\link{plot}} other than
-\code{cex.lab}, \code{type}, \code{xlab}, \code{ylab},
-\code{xaxt}, and \code{yaxt}.}
+  \item{x}{\code{\link{tibble}}. Data set of metrics such as
+that produced by \code{\link{EBVmetric}}.}
+  \item{...}{Further arguments not implemented here.}
 }
 
 \value{\code{plot}.}
@@ -19,12 +17,10 @@
 
 
 \examples{
-## Simulating an objec of class EBVmetric
-set.seed(1)
-areaKm2 <- 1800 - (rnorm(11))
-ats <- ts(areaKm2, start = 2000)
-class(ats) <- c('EBVmetric', class(ats)) 
-
-## A plot of the 'EBVmetric' object
-plot(ats)
+ \donttest{
+ mpio <- 'Uribia'
+ msk <- FCMask(mpio, year = 10:17)
+ met <- EBVmetric(msk, what = 'lsm_l_frac_mn')
+ plot(met)
+ }
 }

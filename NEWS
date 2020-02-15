@@ -1,3 +1,13 @@
+New changes in forestChange V1.0:
+
+Dependence "SDMTools" has been replace by "landscapemetrics".
+
+New functions "barplot.EBVstats", "CCPolygon", "EBVMask", "EBVstats",
+and "FCMask" has been added to the package, see the package
+documentation.
+
+Changes in function "plot.EBVmetric": New multi-panel plot has been created.
+
 New changes in forestChange V0.6:
 
 Changes in function "FCPolygon": New argument 'url' has been added to

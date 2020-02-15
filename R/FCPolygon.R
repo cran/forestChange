@@ -1,14 +1,13 @@
 FCPolygon <- structure(function #Forest-Cover Polygon
-### This function can crop layers of Global Forest Change (\code{GFC})
-### using either Geographic Administrative Units (\code{GADM}) or
-### other user-defined polygons.
+### This function can retrieve and crop layers of Global Forest Change
+### (\code{GFC}) using  polygon geometries (i.e., GADM).
                        ##details<< The \code{GADM} are imported using
                        ##the in-package \code{\link{getGADM}}.
                        ##Links to the data sets are obtained using
                        ##the in-package
                        ##\code{\link{GFCurls}}. Geographic extents
                        ##in both the \code{GADM} and the \code{GFC}
-                       ##are intersected using the package function
+                       ##are intersected implementing
                        ##\code{\link{HansenUrltoExtent}}. Common
                        ##areas between \code{GFC} and \code{GADM}
                        ##are cropped using two functions of the
@@ -25,7 +24,7 @@ FCPolygon <- structure(function #Forest-Cover Polygon
                        ##are big (30,000 km^2). For these cases,
                        ##machines with RAM of 8 GB or greater should
                        ##be used. In unix-alike systems, the
-                       ##package can implement parallel execution,
+                       ##package implements parallel execution,
                        ##see \code{\link{parallel}} package.
                        ##references<< Hansen, M. C., Potapov,
                        ##P. V., Moore, R., Hancher, M., Turubanova,
@@ -34,97 +33,91 @@ FCPolygon <- structure(function #Forest-Cover Polygon
                        ##21st-century forest cover change. science,
                        ##342(6160), 850-853.
 (
-    pol = NULL, ##<<\code{SpatialPolygonsDataFrame}, \code{character}
-                ##or \code{NULL}. A spatial-data polygon, the name of
-                ##a \code{GADM}, or such a name plus its corresponding
+    pol = NULL, ##<<\code{SpatialPolygonsDataFrame}, or
+                ##\code{character}. Polygon geometry, the name of a
+                ##\code{GADM}, or such a name plus its corresponding
                 ##higher-level unit. If \code{NULL} then a list of
-                ##\code{GADM} units is printed.
+                ##\code{GADM} units is printed, see
+                ##\code{\link{getGADM}}.
     lyrs = c('treecover2000','lossyear'), ##<<\code{character}. Vector
                                           ##of strings matching layer
-                                          ##names in the \code{GFC}
-                                          ##data. Defaults
+                                          ##names in the \code{GFC}.
+                                          ##Defaults
                                           ##\code{'treecover2000'} and
                                           ##\code{'lossyear'}.
-        url, ##<<\code{character}.  Path to the \code{html} file
-               ##containing the files. If missing then data from the
-               ##application programming interface of \code{GFC} is
-               ##retrieved, see \code{\link{GFCurls}}.
-    multicore = TRUE, ##<<\code{logical}. Use parallel
-                      ##execution. Default TRUE. This is ignored in
-                      ##Windows machines.
-    ... ##<<Additional arguments in \code{\link{getGADM}} other than
-        ##\code{'unit.nm'}. These could be \code{'level'} and/or
-        ##\code{'country'}.
+    path, ##<<\code{character}.Location of a directory with the
+          ##\code{GFC}. This argument overrides the action of \code{url}.
+    url, ##<<\code{character}.  Web resource with text files
+         ##containing lists of \code{URL}s for the \code{GFC}
+         ##layers. If missing then data from the application
+         ##programming interface of \code{GFC} is retrieved, see
+    ##\code{\link{GFCurls}}.
+    pr.utm = TRUE, ##<<\code{logical}. Project to UTM crs.
+    mc.cores = detectCores(), ##<<\code{numeric}. The number of cores,
+                              ##see \code{\link{mclapply}}.
+    ... ##<<Additional arguments in \code{\link{getGADM}}.
 ) {
-    
-    cropRaster <- function(rst, br){
-        crp <- crop(rst, br)
-        msk <- rasterize(br, crp, mask = TRUE)
-        return(msk)
-    }
-    
-    adm <- pol
-    if(is.null(pol) | is.character(pol)){
-        adm <- getGADM(pol,...)# <-
-        if(is.null(pol))
-            return(adm)}
-    if(missing(url))
-        url  <- NULL
-    urt. <- GFCurls(lyrs, url)# <-
-    td <- tempdir()
-    inters <- sapply(urt., function(x)
-        raster::intersect(HansenUrltoExtent(x), # <-
-                          extent(adm)))
-    do.inters <- unlist(lapply(
-        inters, function(x)!is.null(x)))
-    urls <- urt.[do.inters]
-    layers <- attr(urt.,'lyrs')
-    sep. <- '/' 
-    if(!grepl(sep., urls[1]))
-        sep. <- '\\' 
+    pol. <- pol
+    if(inherits(pol, getOption('inh')[3:4])){
+        pol <- getGADM(pol,...)# <-
+        if(is.null(pol.))
+            return(pol)}
+    fils <- paste(lyrs, collapse = '|')
+    fprll <- getOption('fapp')
+    if(missing(path)){
+        urt. <- GFCurls(lyrs, url)# <-
+        td <- tempdir()
+        inters <- sapply(urt., function(x)
+            raster::intersect(HansenUrltoExtent(x), # <-
+                              extent(pol)))
         do.inters <- unlist(lapply(
             inters, function(x)!is.null(x)))
         urls <- urt.[do.inters]
-        coo2 <- grep(
-            paste(layers, collapse = '|'), urls)
-        url <- urls[coo2]
-        fl <- paste(td, basename(url), sep = sep.)
-        numCores <- detectCores()
-        fprll <- 'mapply'
-        marg <- list(FUN = function(x,y, mode = 'wb')
+        url <- urls[grepl(fils,urls)]
+        fl <- file.path(td, basename(url))
+        right <- sapply(lyrs, function(x)grep(x, fl))
+        fl <- fl[right]
+        if(!getOption('isWin')){
+            marg[['mc.cores']] <- mc.cores
+        }
+        marg. <- c(list(FUN = function(x,y, mode = 'wb')
             download.file(x,y, mode = 'wb'),
             x = url,
-            y = fl,
-            SIMPLIFY = FALSE)
-        if(Sys.info()['sysname']%in%'Windows')
-            multicore <- FALSE
-            if(multicore){
-                fprll <- 'mcmapply'
-                marg <- c(marg, mc.cores = detectCores())}
-            if(!all(basename(url)%in%dir(td)))
-                outp <- do.call(fprll, marg)
-                rst <- lapply(fl,function(x)raster(x))
-                sev. <- length(layers) < length(rst)
-                marg. <- list(FUN = function(x,y)
-                    cropRaster(x,y),
-                    x = rst,
-                    MoreArgs = list(y = adm),
-                    SIMPLIFY = FALSE)
-                if(multicore)
-                    marg. <- c(marg., mc.cores = detectCores())
-                    print('Cutting layers ...')
-                    rst. <- do.call(fprll, marg.)
-                    for(i in 1:length(rst))
-                        names(rst.[[i]]) <- names(rst[[i]])
-                        rst.. <- FCMosaic(rst., lyrs, multicore) # <-
-                        unit. <- 'Polygon'
-                        if(is.null(pol) | is.character(pol)){
-                            unit. <- pol
-                        }
-                        attributes(rst..) <- append(attributes(rst..),
-                                                    list(unit.nm = unit.))
-                        return(rst..)
-### list of rasters or set of \code{GADM} units
+            y = fl), marg)
+        if(!all(basename(url)%in%dir(td))){
+            outp <- do.call(fprll, marg.)}
+    }
+    if(!missing(path)){
+        fils <- paste(lyrs, collapse = '|')
+        drp <- dir(path)
+        grpath <- drp[grepl(fils,drp)]
+        fl <- file.path(path, grpath)
+        right <- sapply(lyrs, function(x)grep(x, fl))
+        fl <- fl[right]
+    }
+    rst <- lapply(fl,function(x)raster(x))
+    if(extent(rst[[1L]]) != extent(pol)){
+        marg. <- c(list(FUN = function(x,y)
+            cropRaster(x,y),
+            x = rst,
+            MoreArgs = list(y = pol)), marg)
+        print('Cutting layers ...')
+        rst. <- do.call(fprll, marg.)
+        rst <- FCMosaic(rst., lyrs, mc.cores = mc.cores) # <-
+    }
+    if(pr.utm){
+        long2UTM <- function(long) {
+            (floor((long + 180)/6) %% 60) + 1
+        }
+        l2u <- long2UTM(extent(rst)[1L])
+        sr <- paste("+proj=utm +zone=", l2u," +ellps=GRS80 +datum=NAD83 +units=m +no_defs", sep ='')
+        polpr <- projectExtent(subset(rst, 1), crs = sr)
+        rst <- projectRaster(rst, polpr)
+    }
+    ## rst <- stack(rst)
+    names(rst) <- lyrs
+    return(rst)
+### \code{RasterStack}, or set of \code{GADM} units.
 } , ex=function() {
     ## A list of departments of Colombia is printed:
     ## \donttest{

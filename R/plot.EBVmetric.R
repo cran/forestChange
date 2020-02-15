@@ -1,58 +1,49 @@
 plot.EBVmetric <- structure(function#EBV-metric plot
 ###A plot of \code{\link{EBVmetric}} is printed.
 (
-    x, ##<<\code{\link{ts}}. Time series such as that produced by
-       ##\code{\link{EBVmetric}}.
-    ... ##<< further arguments in \code{\link{plot}} other than
-        ##\code{cex.lab}, \code{type}, \code{xlab}, \code{ylab},
-        ##\code{xaxt}, and \code{yaxt}.
+    x, ##<<\code{\link{tibble}}. Data set of metrics such as that
+       ##produced by \code{\link{EBVmetric}}.
+    ... ##<<Further arguments not implemented here.
 ){
-    area. <- as.data.frame(x)
-    area.[,'time'] <- as.numeric(time(x))
-    ind <- 'x'
-    area. <- na.omit(area.)
-    rel <- formula(paste(ind, '~time', sep =""))
-    par(oma = c(0,0,0,0))
-    plot(rel, area.,
-         axes = FALSE,
-         type = 'n',
-         xlab = '',
-         ylab = '')
-    xap <- (max(area.[,ind], na.rm = TRUE) - min(area.[,ind], na.rm = TRUE))/20
-    xa. <- round((min(area.[,ind], na.rm = TRUE) - xap))
-    yap <- pretty(area.[,ind])
-    cx. <- 1.2
-    plot(rel, area.,
-         type = 'n',
-         xaxt = 'n',
-         yaxt = 'n',
-         cex.lab = cx.,
-         ## mgp = c(2,3,0),
-         ...)
-    axis(2, at = yap, cex.axis = cx.)
-    fadd <- function(x, is.x = TRUE){
-        if(is.x){
-            rt <- c(min(x),x,max(x))
-        }else{
-            rt <- c(0,x,0)
-        }
-        return(rt)
+    data <- x
+    ell <- list(...) 
+    if(is.numeric(data$'layer')){
+        ggplot(data, aes(x= data$'layer', y = data$'value', color = data$'id')) + 
+            geom_line(size = 1, color = "grey20") + 
+            facet_wrap(~metric, scales = "free_y") +
+            labs(y = "value", x = "layer") +
+            theme_bw() +
+            theme(axis.text.x = element_text(colour = "grey30", size = 15, angle = 90, hjust = 0.5, vjust = 0.5),
+                  axis.text.y = element_text(colour = "grey20", size = 15),
+                  text = element_text(size = 16))
+    } else {
+        ggplot(data, aes(x=data$"layer", y=data$"value")) + 
+            geom_segment(aes(x=data$"layer", 
+                             xend=data$"layer", 
+                             y=0, 
+                             yend=data$"value")) +
+            geom_point(size=3, color = 'grey20') + 
+            facet_wrap(~metric, scales = "free_x") +
+            theme_bw() +
+            theme(axis.text.x = element_text(colour = "grey30", size = 15, angle = 90, hjust = 0.5, vjust = 0.5),
+                  axis.text.y = element_text(colour = "grey20", size = 15),
+                  text = element_text(size = 16)) +
+            coord_flip()
     }
-    polygon(fadd(area.$'time'), fadd(area.[,ind],F),
-            border =  'grey70', col = 'grey80')
-    axis(1, cex.axis = cx.)
-    lines(rel, area., col = 'grey70', pch = 19, lwd = 2)
-    points(rel, area., col = 'white', pch = 19, cex = 2)
-    points(rel, area., col = 'black', pch = 19)
-box(lwd = 2)
+    ## ggplot(data, aes(layer, value, color = id)) + 
+    ##     geom_line(size = 1) + 
+    ##     facet_wrap(~metric, scales = "free") +
+    ##     labs(y = "value") +
+    ##     theme_bw() +
+    ##     theme(axis.text.x = element_text(colour = "grey30", size = 12, angle = 90, hjust = 0.5, vjust = 0.5),
+    ##           axis.text.y = element_text(colour = "grey20", size = 12),
+    ##           text = element_text(size = 16))
 ### \code{plot}.
 } , ex=function(){
-    ## Simulating an objec of class EBVmetric
-    set.seed(1)
-    areaKm2 <- 1800 - (rnorm(11))
-    ats <- ts(areaKm2, start = 2000)
-    class(ats) <- c('EBVmetric', class(ats)) 
-    
-    ## A plot of the 'EBVmetric' object
-    plot(ats)
+    ## \donttest{
+    ## mpio <- 'Uribia'
+    ## msk <- FCMask(mpio, year = 10:17)
+    ## met <- EBVmetric(msk, what = 'lsm_l_frac_mn')
+    ## plot(met)
+    ## }
 })

@@ -1,38 +1,30 @@
 \name{EBVmetric}
 \alias{EBVmetric}
 \title{EBV metric}
-\description{This function can compute metrics of two Essential Biodiversity
-Variables (\code{EBV} metrics): forest extents and forest
-fragmentation indices using Global Forest Change data
-(\code{GFC}).}
-\usage{EBVmetric(tc, met = "forest.ext", year = 0, perc = 80)}
+\description{This function formats \code{GFC} and computes structural metrics
+of Essential Biodiversity Variables (\code{EBV} metrics):
+forest-cover areas and landscape metrics, in predefined polygons
+or GADM.}
+\usage{EBVmetric(pol, what = "lsm_l_tafc", mc.cores = detectCores(), 
+    ...)}
 \arguments{
-  \item{tc}{\code{RasterStack}. \code{GFC} layers such as that
-produced by \code{\link{FCPolygon}}.}
-  \item{met}{\code{character}. Name of a \code{EBV}
-metric, see \code{Details} section. Partial
-matching is supported. Default
-\code{'forest.ext'}.}
-  \item{year}{\code{numeric}. A year in the interval 0-17 (or
-2000-2017). Default \code{0}.}
-  \item{perc}{\code{numeric}.  Minimum percentage of canopy
-closure per grid cell in \code{tc}. Default \code{80}.}
+  \item{pol}{\code{RasterStack}.Stack such as these produced by
+\code{\link{FCMask}}.}
+  \item{what}{\code{character}. The metrics. These
+include \code{'lsm_l_tafc'} to compute
+total forest-cover areas (ha) and other
+landscape metrics in
+\code{\link{calculate_lsm}}. Default
+(\code{'lsm_l_tafc'}).}
+  \item{mc.cores}{\code{numeric}. The number of cores,
+see \code{\link{mclapply}}.}
+  \item{\dots}{additional arguments in \code{\link{calculate_lsm}}.}
 }
-\details{Diverse \code{EBV} metrics are
-supported: forest extents \code{'forest.ext'}
-(\code{km^2}), fractal-dimension indices
-\code{'frac.dim.index'} (dimensionless), and
-other values in \code{\link{PatchStat}}. The
-\code{GFC} are masked twice. The first mask
-filters values which are equal or greater than
-\code{perc}. The second mask subtracts those
-values in the \code{'treecover2000'} raster
-which correspond to values in the
-\code{'lossyear'} raster, spanning from 2000 to
-\code{year}. Surfaces of the median pixels are
-computed supposing long/lat coordinates, see
-\code{\link{area}}.}
-\value{\code{ts}. EBV metric.}
+\details{Coordinate system of the spatial
+units should be \code{ UTM}. Metrics other
+than \code{'lsm_l_tafc'} are calculated
+implementing \code{\link{calculate_lsm}}.}
+\value{\code{tibble}.}
 \references{O'Connor, B., Secades, C.,
 Penner, J., Sonnenschein, R., Skidmore, A.,
 Burgess, N. D., & Hutton, J. M. (2015). Earth
@@ -46,14 +38,10 @@ sensing in ecology and conservation, 1(1),
 
 
 \examples{
-EBVmetric(NULL)
-## Lets change mpio = NULL by a GADM unit: e.g., the municipality
-## of 'Uribia' in Colombia and compute fractal dimensions from
-## year 10 to year 17:
  \donttest{
  mpio <- 'Uribia'
- gadm <- FCPolygon(mpio, level = 2)
- smet <- EBVmetric(gadm, met = 'frac', year = 10:17)
- plot(smet)
+ msk <- FCMask(mpio, year = 10:17)
+ met <- EBVmetric(msk, what = 'lsm_l_frac_mn')
+ plot(met)
  }
 }

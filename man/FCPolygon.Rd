@@ -1,33 +1,34 @@
 \name{FCPolygon}
 \alias{FCPolygon}
 \title{Forest-Cover Polygon}
-\description{This function can crop layers of Global Forest Change (\code{GFC})
-using either Geographic Administrative Units (\code{GADM}) or
-other user-defined polygons.}
+\description{This function can retrieve and crop layers of Global Forest Change
+(\code{GFC}) using  polygon geometries (i.e., GADM).}
 \usage{FCPolygon(pol = NULL, lyrs = c("treecover2000", "lossyear"), 
-    url, multicore = TRUE, ...)}
+    path, url, pr.utm = TRUE, mc.cores = detectCores(), ...)}
 \arguments{
-  \item{pol}{\code{SpatialPolygonsDataFrame}, \code{character}
-or \code{NULL}. A spatial-data polygon, the name of
-a \code{GADM}, or such a name plus its corresponding
+  \item{pol}{\code{SpatialPolygonsDataFrame}, or
+\code{character}. Polygon geometry, the name of a
+\code{GADM}, or such a name plus its corresponding
 higher-level unit. If \code{NULL} then a list of
-\code{GADM} units is printed.}
+\code{GADM} units is printed, see
+\code{\link{getGADM}}.}
   \item{lyrs}{\code{character}. Vector
 of strings matching layer
-names in the \code{GFC}
-data. Defaults
+names in the \code{GFC}.
+Defaults
 \code{'treecover2000'} and
 \code{'lossyear'}.}
-  \item{url}{\code{character}.  Path to the \code{html} file
-containing the files. If missing then data from the
-application programming interface of \code{GFC} is
-retrieved, see \code{\link{GFCurls}}.}
-  \item{multicore}{\code{logical}. Use parallel
-execution. Default TRUE. This is ignored in
-Windows machines.}
-  \item{\dots}{Additional arguments in \code{\link{getGADM}} other than
-\code{'unit.nm'}. These could be \code{'level'} and/or
-\code{'country'}.}
+  \item{path}{\code{character}.Location of a directory with the
+\code{GFC}. This argument overrides the action of \code{url}.}
+  \item{url}{\code{character}.  Web resource with text files
+containing lists of \code{URL}s for the \code{GFC}
+layers. If missing then data from the application
+programming interface of \code{GFC} is retrieved, see
+\code{\link{GFCurls}}.}
+  \item{pr.utm}{\code{logical}. Project to UTM crs.}
+  \item{mc.cores}{\code{numeric}. The number of cores,
+see \code{\link{mclapply}}.}
+  \item{\dots}{Additional arguments in \code{\link{getGADM}}.}
 }
 \details{The \code{GADM} are imported using
 the in-package \code{\link{getGADM}}.
@@ -35,7 +36,7 @@ Links to the data sets are obtained using
 the in-package
 \code{\link{GFCurls}}. Geographic extents
 in both the \code{GADM} and the \code{GFC}
-are intersected using the package function
+are intersected implementing
 \code{\link{HansenUrltoExtent}}. Common
 areas between \code{GFC} and \code{GADM}
 are cropped using two functions of the
@@ -52,9 +53,9 @@ of the polygons used to cut the \code{GFC}
 are big (30,000 km^2). For these cases,
 machines with RAM of 8 GB or greater should
 be used. In unix-alike systems, the
-package can implement parallel execution,
+package implements parallel execution,
 see \code{\link{parallel}} package.}
-\value{list of rasters or set of \code{GADM} units}
+\value{\code{RasterStack}, or set of \code{GADM} units.}
 \references{Hansen, M. C., Potapov,
 P. V., Moore, R., Hancher, M., Turubanova,
 S. A. A., Tyukavina, A., ... & Kommareddy,
